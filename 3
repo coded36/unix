@@ -1,0 +1,43 @@
+a.
+#include <iostream>
+#include <unistd.h>
+int main(int argc, char *argv[]) {
+if (argc != 3) {
+std::cerr << "Usage: " << argv[0] << " source_file target_file" << std::endl;
+return 1;
+}
+const char *source_file = argv[1];
+const char *target_file = argv[2];
+if (link(source_file, target_file) == 0) {
+std::cout << "Hard link created: " << target_file << " -> " << source_file << std::endl;
+return 0;
+} else {
+perror("Error creating hard link");
+return 2;
+}
+}
+
+
+b.
+#include <iostream>
+#include <unistd.h>
+int main() {
+pid_t child_pid;
+
+child_pid = fork();
+if (child_pid == -1) {
+std::cerr << "Fork failed." << std::endl;
+return 1;
+}
+for (int i = 1; i <= 5; i++) {
+if (child_pid == 0) {
+
+std::cout << "Child Count: " << i << std::endl;
+} else {
+
+std::cout << "Parent Count: " << i << std::endl;
+}
+sleep(1); // Sleep for 1 second
+}
+return 0;
+}
